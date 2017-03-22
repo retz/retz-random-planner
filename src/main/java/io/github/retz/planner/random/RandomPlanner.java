@@ -61,15 +61,16 @@ public class RandomPlanner implements Planner{
     public Plan plan(Map<String, ResourceQuantity> offers, List<Job> jobs) {
         List<Job> queue = new LinkedList<>(jobs);
         Plan plan = new Plan();
-        if (queue.size() == 0) {
-            for (Map.Entry<String, ResourceQuantity> entry : offers.entrySet()) {
+
+        for (Map.Entry<String, ResourceQuantity> entry : offers.entrySet()) {
+            if (queue.size() == 0) {
                 if (plan.getOfferIdsToStock().size() < maxStock) {
                     plan.addStock(entry.getKey());
+                    continue;
+                } else {
+                    return plan;
                 }
             }
-            return plan;
-        }
-        for (Map.Entry<String, ResourceQuantity> entry : offers.entrySet()) {
             int i = random.nextInt(queue.size());
             if (entry.getValue().fits(queue.get(i))) {
                 plan.setJob(entry.getKey(), queue.remove(i));
