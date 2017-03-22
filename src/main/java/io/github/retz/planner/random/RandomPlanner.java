@@ -16,7 +16,9 @@
  */
 package io.github.retz.planner.random;
 
+import io.github.retz.planner.spi.Attribute;
 import io.github.retz.planner.spi.Plan;
+import io.github.retz.planner.spi.Offer;
 import io.github.retz.planner.spi.Planner;
 import io.github.retz.protocol.data.Job;
 import io.github.retz.protocol.data.ResourceQuantity;
@@ -58,11 +60,16 @@ public class RandomPlanner implements Planner{
     }
 
     @Override
-    public Plan plan(Map<String, ResourceQuantity> offers, List<Job> jobs) {
+    public Plan plan(Map<String, Offer> offers, List<Job> jobs) {
         List<Job> queue = new LinkedList<>(jobs);
         Plan plan = new Plan();
 
-        for (Map.Entry<String, ResourceQuantity> entry : offers.entrySet()) {
+        for (Map.Entry<String, Offer> entry : offers.entrySet()) {
+            LOG.info("Offer({}), {} attributes, resource={}", entry.getKey(),
+                    entry.getValue().attributes().size(), entry.getValue().resource());
+            for(Attribute attr: entry.getValue().attributes()) {
+                LOG.info("attr: {}", attr);
+            }
             if (queue.size() == 0) {
                 if (plan.getOfferIdsToStock().size() < maxStock) {
                     plan.addStock(entry.getKey());
@@ -72,7 +79,7 @@ public class RandomPlanner implements Planner{
                 }
             }
             int i = random.nextInt(queue.size());
-            if (entry.getValue().fits(queue.get(i))) {
+            if (entry.getValue().resource().toQuantity().fits(queue.get(i))) {
                 plan.setJob(entry.getKey(), queue.remove(i));
             } else if (plan.getOfferIdsToStock().size() < maxStock) {
                 plan.addStock(entry.getKey());
