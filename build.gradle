@@ -19,14 +19,13 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    mavenLocal()
     maven { url 'http://retz-maven.s3.amazonaws.com/releases' }
     maven { url 'http://retz-maven.s3.amazonaws.com/snapshots' }
 }
 
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.21'
-    compile group: 'io.github.retz', name: 'retz-planner-spi', version: '0.2.5-SNAPSHOT'
+    compile group: 'io.github.retz', name: 'retz-planner-spi', version: '0.2.7'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
