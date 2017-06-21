@@ -1,5 +1,5 @@
 /**
- *    Retz
+ *    Retz Random Planner
  *    Copyright (C) 2017 Nautilus Technologies, Inc.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
